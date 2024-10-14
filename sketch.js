@@ -1,51 +1,53 @@
-let posX, posY;
-let velX, velY;
-let diametro;
-let radio;
 let bgColor;
+let pelotas = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   bgColor = color(random(100, 200), random(150), random(100));
-
-  radio = ceil(random(50, 80));
-  diametro = radio * 2;
-  // console.log(diametro);
-  posX = random(radio, width - radio);
-  posY = random(radio, height - radio);
-
-  // velX = random(-10, 10);
-  velX = 7;
-  velY = 7;
+  for (let i = 0; i < 100; i++) {
+    let nuevaPelota = new Pelota();
+    pelotas.push(nuevaPelota);
+  }
 }
 
 function draw() {
   background(bgColor);
-  fill(255);
-  noStroke();
+  // Recorre cada pelota en el array pelotas
+  for (let i = 0; i < pelotas.length; i++) {
+    pelotas[i].update(); // Actualiza la posición de cada pelota
+    pelotas[i].display(); // Muestra cada pelota
+  }
+}
 
-  posX += velX;
-  posY += velY;
-
-  if (posX > width - radio) {
-    velX *= -1;
-    bgColor = color(random(100, 200), random(150), random(100));
+class Pelota {
+  constructor() {
+    this.radio = ceil(random(5, 30));
+    this.diametro = this.radio * 2;
+    this.posX = random(this.radio, width - this.radio);
+    this.posY = random(this.radio, height - this.radio);
+    this.velX = random(-10, 10);
+    this.velY = random(-10, 10);
+    console.log("estoy viva");
   }
 
-  if (posX < radio) {
-    velX *= -1;
-    bgColor = color(random(100, 200), random(150), random(100));
+  // Actualiza la posición de la pelota
+  update() {
+    this.posX += this.velX;
+    this.posY += this.velY;
+
+    if (this.posX > width - this.radio || this.posX < this.radio) {
+      this.velX *= -1;
+    }
+
+    if (this.posY > height - this.radio || this.posY < this.radio) {
+      this.velY *= -1;
+    }
   }
 
-  if (posY > height - radio) {
-    velY *= -1;
-    bgColor = color(random(100, 200), random(150), random(100));
+  // Dibuja la pelota
+  display() {
+    fill(255);
+    noStroke();
+    circle(this.posX, this.posY, this.diametro);
   }
-
-  if (posY < radio) {
-    velY *= -1;
-    bgColor = color(random(100, 200), random(150), random(100));
-  }
-
-  circle(posX, posY, diametro);
 }
