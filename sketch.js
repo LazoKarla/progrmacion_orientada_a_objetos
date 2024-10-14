@@ -21,7 +21,7 @@ function draw() {
 
 class Pelota {
   constructor() {
-    this.radio = ceil(random(5, 30));
+    this.radio = ceil(random(10, 30));
     this.diametro = this.radio * 2;
     this.posX = random(this.radio, width - this.radio);
     this.posY = random(this.radio, height - this.radio);
