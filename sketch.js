@@ -1,53 +1,53 @@
-let bgColor;
-let pelotas = [];
+let particulas = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  bgColor = color(random(100, 200), random(150), random(100));
-  for (let i = 0; i < 100; i++) {
-    let nuevaPelota = new Pelota();
-    pelotas.push(nuevaPelota);
-  }
 }
 
 function draw() {
-  background(bgColor);
-  // Recorre cada pelota en el array pelotas
-  for (let i = 0; i < pelotas.length; i++) {
-    pelotas[i].update(); // Actualiza la posición de cada pelota
-    pelotas[i].display(); // Muestra cada pelota
-  }
-}
+  background(20);
+  let nuevaParticula = new Particula(mouseX, mouseY);
+  particulas.push(nuevaParticula);
 
-class Pelota {
-  constructor() {
-    this.radio = ceil(random(10, 30));
-    this.diametro = this.radio * 2;
-    this.posX = random(this.radio, width - this.radio);
-    this.posY = random(this.radio, height - this.radio);
-    this.velX = random(-10, 10);
-    this.velY = random(-10, 10);
-    console.log("estoy viva");
+  for (let i = 0; i < particulas.length; i++) {
+    particulas[i].update();
+    particulas[i].display();
   }
 
-  // Actualiza la posición de la pelota
-  update() {
-    this.posX += this.velX;
-    this.posY += this.velY;
+  /**
+   * Esta es una forma de borrar las partículas muertas utilizando
+   * un for loop que navega todas las partículas y se pergunta por
+   * la varible boleana estaViva.
+   *
+   * Utiliza la función slipice para borrar la partícula específica
+   * mediante su Indice
+   *
+   */
 
-    if (this.posX > width - this.radio || this.posX < this.radio) {
-      this.velX *= -1;
-    }
+  // for (let i = 0; i < particulas.length; i++) {
+  // 	if (!particulas[i].estaViva) {
+  // 		particulas.splice(i, 1);
+  // 	}
+  // }
 
-    if (this.posY > height - this.radio || this.posY < this.radio) {
-      this.velY *= -1;
-    }
+  /**
+   * Esta es la forma moderna de resolverlo
+   */
+
+  particulas = particulas.filter((pelota) => pelota.estaViva);
+
+  noFill();
+  stroke(252, 99, 145);
+  strokeWeight(1);
+
+  for (let i = 0; i < particulas.length - 1; i++) {
+    line(
+      particulas[i].posx,
+      particulas[i].posy,
+      particulas[i + 1].posx,
+      particulas[i + 1].posy
+    );
   }
 
-  // Dibuja la pelota
-  display() {
-    fill(255);
-    noStroke();
-    circle(this.posX, this.posY, this.diametro);
-  }
+  console.log(particulas.length);
 }
